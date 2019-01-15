@@ -14,5 +14,6 @@ func main() {
 	http.HandleFunc("/upload", UploadFile)
 	http.HandleFunc("/lists", Lists)
 	http.Handle("/", http.FileServer(http.Dir("static")))
+	//http.Handle("/", http.FileServer(http.Dir("static/")))
 	http.ListenAndServe(":8086", nil)
 }

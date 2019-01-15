@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -51,23 +52,26 @@ func UploadFile2(w http.ResponseWriter, r *http.Request) {
 
 func UploadFile(w http.ResponseWriter, r *http.Request) {
 	var resp Resp
-
-	dirname := "../file/" + h.Filename
 	title := r.FormValue("title")
+	ctx := r.FormValue("content")
+	hash := sha256.Sum256([]byte(title))
+	fileHash := fmt.Sprintf("%x", hash)
+	fmt.Println(ctx, title, fileHash)
+
+	dirname := "static/blogfile/" + fileHash //h.Filename
+
 	file, err := os.Create(dirname)
 	if err != nil {
 		panic(err)
 	}
-	_, err = io.Copy(file, f)
-	if err != nil {
-		panic(err)
-	}
+
 	defer file.Close()
 	//fmt.Println(h)
 	//w.Write([]byte("upload success"))
 	//写到 数据库 中
 	//fmt.Println(h.Filename, dirname, h.Size, title)
-	MgSess.UploadFile(title, h.Filename, h.Size)
+	MgSess.UploadFile(title, "blogfile/"+fileHash, 0)
+	file.Write([]byte(ctx))
 	resp.Errno = "0"
 	resp.Errmsg = "OK"
 	//fmt.Println(resp)

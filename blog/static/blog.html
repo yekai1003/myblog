@@ -104,8 +104,11 @@
                               type:"get",
                               dataType:"json",
                               success:function(data){
-                                  var html = template("listTemplateId",data);
-                                 $(".list_content ul").html(html);
+									if (data.Data != null) {
+										var html = template("listTemplateId",data);
+                                 		$(".list_content ul").html(html);
+									}
+                                  
                               }
                           })
                  }
