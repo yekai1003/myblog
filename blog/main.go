@@ -13,6 +13,6 @@ func main() {
 	http.HandleFunc("/ping", Pong)
 	http.HandleFunc("/upload", UploadFile)
 	http.HandleFunc("/lists", Lists)
-	http.Handle("/", http.FileServer(http.Dir("../file/")))
+	http.Handle("/", http.FileServer(http.Dir("static")))
 	http.ListenAndServe(":8086", nil)
 }
